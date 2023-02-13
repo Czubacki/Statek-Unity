@@ -11,12 +11,12 @@ public class PlayerController : MonoBehaviour
     private Vector2 controlls;
     private Transform Gun;
     private bool fireButtonDown = false;
-    
+    private Camera1 cs;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         Gun = transform.Find("Gun");
-    
+        cs = Camera.main.GetComponent<Camera1>();
     }
 
     // Update is called once per frame
@@ -27,16 +27,16 @@ public class PlayerController : MonoBehaviour
         h = Input.GetAxis("Horizontal");
         //if(v != 0 && h != 0) 
         controlls = new Vector2(h, v);
-        if(Mathf.Abs(transform.position.x) > 21)
+        float maxHorizontal = cs.worldWidth / 2;
+        float maxVertical = cs.worldHeight / 2;
+        if(Mathf.Abs(transform.position.x) > maxHorizontal)
         {
-           Vector3 newPosition = new Vector3(transform.position.x * -1,
-               0, transform.position.z);
+           Vector3 newPosition = new Vector3(transform.position.x * -0.95f, 0, transform.position.z);
            transform.position = newPosition;
         }
-        if (Mathf.Abs(transform.position.z) > 12)
+        if (Mathf.Abs(transform.position.z) > maxVertical)
         {
-            Vector3 newPosition = new Vector3(transform.position.x,
-                0, transform.position.z * -1);
+            Vector3 newPosition = new Vector3(transform.position.x, 0, transform.position.z * -0.95f);
           transform.position = newPosition;
         }
         if(Input.GetKeyDown(KeyCode.Space))
