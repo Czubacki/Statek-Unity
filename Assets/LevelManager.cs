@@ -38,18 +38,27 @@ public class LevelManager : MonoBehaviour
     void Spawn()
     {
         float randomX, randomZ;
+        //decydujemy czy spawnujemy kamulec na liniach poziomych czy pionowych
         if (Mathf.Round(Random.Range(0, 1)) == 0)
         {
-            randomZ = Mathf.Round(Random.Range(0, 1)) * maxVertical;
+            //generujemy na liniach poziomych
+            randomZ = randomSign() * maxVertical; //to do poprawki powinno byc -1* albo 1*
             randomX = Random.Range(0, maxHorizontal);
         }
         else
         {
-            randomX = Mathf.Round(Random.Range(0, 1)) * maxHorizontal;
+            //generujemy na liniach pionowych
+            randomX = randomSign() * maxHorizontal;
             randomZ = Random.Range(0, maxVertical);
         }
         Vector3 spawnPoint = new Vector3(randomX, 0, randomZ);
         Instantiate(asteroidPrefab, spawnPoint, Quaternion.identity);
+    }
+    int randomSign()
+    {
+        int[] numbers = { -1, 1 };
+        int randomIndex = Random.Range(0, numbers.Length);
+        return numbers[randomIndex];
     }
 
 }

@@ -1,26 +1,24 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class asteroidscript : MonoBehaviour
 {
-    public float speed = 2f;
+    GameObject player;
+    Rigidbody rb;
     
     // Start is called before the first frame update
     void Start()
     {
-
-
-        Transform player = GameObject.FindGameObjectWithTag("Player").transform;
-        //transform.LookAt(player);
-        //transform.GetComponent<Rigidbody>().AddForce(Vector3.forward,ForceMode.VelocityChange);
-        Vector3 randomVector = new Vector3(Random.Range(0, 90), Random.Range(0, 90), Random.Range(0, 90));
-        transform.GetComponent<Rigidbody>().AddTorque(randomVector);
-        Vector3 playerVector = player.position - transform.position;
-        transform.GetComponent<Rigidbody>().AddForce(playerVector.normalized * speed, ForceMode.VelocityChange);
-    
-    
-    
+        player = GameObject.FindGameObjectWithTag("Player");
+        rb = GetComponent<Rigidbody>();
+        Vector3 movementVector = player.transform.position - transform.position;
+        //stabilizujemy prêdkoœæ asteroidy
+        movementVector = movementVector.normalized * 10;
+        rb.AddForce(movementVector, ForceMode.VelocityChange);
+        rb.AddTorque(new Vector3(Random.Range(0, 90), Random.Range(0, 90), Random.Range(0, 90)));
+        
+        Destroy(gameObject, 5);
     }
 
     // Update is called once per frame
@@ -28,4 +26,16 @@ public class asteroidscript : MonoBehaviour
     {
         
     }
+    private void OnCollisionEnter(Collision collision)
+    {
+        GameObject other = collision.gameObject;
+        if (other.CompareTag("Bullet"))
+        {
+            Destroy(other);
+            Destroy(gameObject);
+        }
+    }
+
+
+
 }
